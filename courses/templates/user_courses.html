@@ -1,0 +1,15 @@
+<!-- templates/courses/user_courses.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Courses</title>
+</head>
+<body>
+    <h1>Courses you are enrolled in</h1>
+    <ul>
+        {% for course in courses %}
+            <li>{{ course.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
