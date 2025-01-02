@@ -1,15 +1,72 @@
-<!-- templates/courses/user_courses.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Courses</title>
-</head>
-<body>
-    <h1>Courses you are enrolled in</h1>
-    <ul>
+{% extends "base.html" %}
+
+{% block title %}My Learning{% endblock %}
+
+{% block content %}
+    <!-- Title Section -->
+    <div class="mb-4">
+        <h1>My Learning</h1>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" href="#">All Courses</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">My Lists</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Wishlist</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Archived</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Learning Tools</a></li>
+        </ul>
+    </div>
+
+    <!-- Notification Box -->
+    <div class="alert alert-info" role="alert">
+        Schedule Learning Time <a href="#" class="btn btn-primary ml-3">Get Started</a>
+    </div>
+
+    <!-- Filter Form -->
+    <form method="GET" class="mb-4">
+        <div class="form-row">
+            <div class="col">
+                <select name="instructor" class="form-control">
+                    <option value="">All Instructors</option>
+                    {% for instructor in instructors %}
+                        <option value="{{ instructor.id }}" {% if request.GET.instructor == instructor.id|stringformat:"s" %}selected{% endif %}>
+                            {{ instructor.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <select name="subject" class="form-control">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                        <option value="{{ subject.id }}" {% if request.GET.subject == subject.id|stringformat:"s" %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Course List Section -->
+    <div class="row">
         {% for course in courses %}
-            <li>{{ course.name }}</li>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if course.thumbnail %}
+                        <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">Instructor: {{ course.author.username }}</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: {{ course.progress }}%;" aria-valuenow="{{ course.progress }}" aria-valuemin="0" aria-valuemax="100">{{ course.progress }}%</div>
+                        </div>
+                        <a href="#" class="btn btn-secondary">Leave a rating</a>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+{% endblock %}
